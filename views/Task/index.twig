@@ -1,0 +1,83 @@
+{% extends 'layout.twig' %}
+{% block title trans("task.title") %}
+{% block body %}
+
+    <div class="card card-body">
+        {% if ok %}
+            <div class="alert alert-success">
+                {{ trans("task.operational") }}
+                <small class="pull-right">{{ lastUpdated }}</small>
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                {{ trans("task.notoperational") }}
+                <small class="pull-right">{{ lastUpdated }}</small>
+            </div>
+        {% endif %}
+        {% if data is empty %}
+            <p>No data</p>
+        {% endif %}
+
+        <ul class="list-group">
+            {% for line in data %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <p>
+                        {{ line.name }} - {{ line.location }}
+
+                        <a data-toggle="tooltip" data-placement="bottom"
+                           title="{{ line.lastping | formatted_date('d/m/y H:i:s') }}">
+                            <i class="fa fa-question-circle"></i>
+                        </a>
+                    </p>
+
+                    {% if line.online %}
+                        <span class="badge bg-success rounded-pill">{{ line.ping }}</span>
+                    {% else %}
+                        <span class="badge bg-danger rounded-pill">{{ trans("offline") }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="card">
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                <tr>
+                    <th>{{ trans("name") }}</th>
+                    <th>{{ trans("task.category") }}</th>
+                    <th>{{ trans("server") }}</th>
+                    <th>{{ trans("state") }}</th>
+                    <th>{{ trans("date2") }}</th>
+                    <th>{{ trans("task.progress") }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task in tasks %}
+
+                    <tr>
+                        <td><a href="{{ path('task.show', {id: task.id}) }}">{{ task.name }}</a></td>
+                        <td>
+                            <span class="badge badge-info">{{ task.category }}</span>
+                        </td>
+                        <td>{{ task.serverName }}</td>
+                        <td>
+                            <span class="badge badge-success">{{ task.state }}</span>
+                        </td>
+                        <td>{{ task.serverName }}</td>
+                        <td>
+                            {{ trans("task.progress") }} ({{ task.progress }}%)
+                            <div class="progress progress-xs progress-striped">
+                                <div class="progress-bar bg-info" role="progressbar" data-toggle="tooltip"
+                                     title="{{ task.progress }}%"
+                                     style="width: {{ task.progress }}%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{{ csrf_input () }}
+<div class="row">
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        {{ field('name', item.name, trans("name")) }}
+    </div>
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        {{ field('server_id', item.serverId, trans("servers"), {options: servers}) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        {{ field('start_at', item.startAt.format('Y-m-d H:i:S'), trans("admin.report.cron.start_at")) }}
+    </div>
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        {{ field('close_at', item.closeAt.format('Y-m-d H:i:S'), trans("admin.report.cron.end_at")) }}
+    </div>
+
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        {{ field('category', item.category, trans("task.category"), {options: categories}) }}
+    </div>
+
+    <div class="col-sm-12 col-lg-6 col-md-6">
+        <div class="form-group">
+            <label for="progress">{{ trans("task.progress") }} ({{ item.progress }}%)</label>
+            <input type="range" class="form-control-range" id="progress" value="{{ item.progress }}" name="progress"
+                   onchange="updateTextInput(this.value);"
+                   maxlength="100" minlength="0">
+        </div>
+    </div>
+    {% if edit %}
+        <div class="col-sm-12 col-lg-6 col-md-6">
+            {{ field('state', item.state, trans("state2"), {options: states}) }}
+        </div>
+    {% endif %}
+    {% if create %}
+
+        <div class="col-sm-12 col-lg-12 col-md-12">
+            {{ field('content', null, trans("task.content"), {type: 'textarea'}) }}
+        </div>
+    {% endif %}
+</div>

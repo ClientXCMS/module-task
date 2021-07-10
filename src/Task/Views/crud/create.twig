@@ -1,0 +1,39 @@
+{% extends '@admin/layout.twig' %}
+{% block title trans("task.title") %}
+{% block pagetitle trans("task.title") %}
+{% block pagesubtitle trans("task.subtitle") %}
+
+{% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/3.0.7/flatpickr.css">
+{% endblock %}
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/3.0.7/flatpickr.js"></script>
+    <script>
+        // creates multiple instances
+        flatpickr("#start_at, #close_at", {
+            enableTime: true,
+            altInput: true,
+            altFormat: 'j F Y, H:i',
+            dateFormat: 'Y-m-d H:i:S'
+        });
+        const forelement = document.querySelector("label[for='progress']")
+        let name = forelement.innerHTML
+        if (name.includes('(')) {
+            name = name.split('(')[0]
+        }
+
+        function updateTextInput(value) {
+            forelement.innerHTML = name + " (" + value + "%)"
+        }
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ path(routePrefix ~'.create') }}" method="post">
+                {% include viewPath ~ '/form.twig' with {create: true} %}
+                <button type="submit" class="btn btn-primary">{{ trans("create") }}</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

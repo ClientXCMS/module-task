@@ -1,0 +1,87 @@
+{% extends '@admin/layout.twig' %}
+
+{% block style %}
+    {% include '@admin/bullet.twig' %}
+{% endblock %}
+{% block title trans("task.title") %}
+{% block pagetitle trans("task.title") %}
+{% block pagesubtitle trans("task.subtitle") %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                    <form method="GET" class="form-inline mb-3 mr-3">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="{{ trans("search") }}" name="s"
+                                   value="{{ query }}">
+                        </div>
+                        <button class="btn btn-info" title="{{ trans("search") }}"><i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                <div class="ml-auto p-2 bd-highlight">
+                    <a href="{{ path(routePrefix ~'.create') }}" class="btn btn-info mb-3"
+                       title="{{ trans("new") }}">{{ trans("new") }}</a>
+                </div>
+            </div>
+            <div class="table-responsive">
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">{{ trans("name") }}</th>
+
+                        <th scope="col">{{ trans("server") }}</th>
+
+                        <th scope="col">{{ trans("task.progress") }}</th>
+
+                        <th scope="col">{{ trans("state2") }}</th>
+                        <th scope="col" class="bullet">{{ trans("active") }}</th>
+                        <th scope="col">{{ trans("action") }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if items is not empty %}
+                        {% for item in items %}
+                            <tr>
+                                <td>#{{ item.id }}</td>
+                                <td>{{ item.name }}</td>
+
+                                <td>{{ item.serverName }}</td>
+
+                                <td>{{ item.progress }}%</td>
+
+                                <td>{{ item.state }}</td>
+                                <td class="bullet">
+                                    <div class="bullet bullet-{{ item.bullet }}"></div>
+                                </td>
+                                <td>
+                                    <a href="{{ path(routePrefix ~'.edit', {id: item.id}) }}" class="btn btn-primary"
+                                       data-toggle="tooltip" data-placement="top" title="{{ item.name }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">{{ trans("no_record") }}</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                {% if query is defined %}
+                    {{ paginate(items, routePrefix ~'.index', {'query':query}) }}
+                {% endif %}
+                {% if query is not defined %}
+                    {{ paginate(items, routePrefix ~'.index') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

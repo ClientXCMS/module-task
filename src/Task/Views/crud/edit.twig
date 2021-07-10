@@ -1,0 +1,93 @@
+{% extends '@admin/layout.twig' %}
+{% block title trans("task.title") %}
+{% block pagetitle trans("task.title") %}
+{% block pagesubtitle trans("task.subtitle") %}
+{% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/3.0.7/flatpickr.css">
+{% endblock %}
+{% block script %}
+    {{ ago_scripts() }}
+    <script src="{{ theme_global('autogrow.js') }}" type="module"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/3.0.7/flatpickr.js"></script>
+    <script>
+        // creates multiple instances
+        flatpickr("#start_at, #close_at", {
+            enableTime: true,
+            altInput: true,
+            altFormat: 'j F Y, H:i',
+            dateFormat: 'Y-m-d H:i:S'
+        });
+
+        const forelement = document.querySelector("label[for='progress']")
+        let name = forelement.innerHTML
+        if (name.includes('(')) {
+            name = name.split('(')[0]
+        }
+
+        function updateTextInput(value) {
+            forelement.innerHTML = name + " (" + value + "%)"
+        }
+    </script>
+
+{% endblock %}
+{% block body %}
+
+    <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ path(routePrefix ~'.edit', {id: item.id}) }}" method="post">
+                    {% include viewPath ~'/form.twig' with {edit : true} %}
+                    <button type="submit" class="btn btn-primary">{{ trans("save") }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="card card-widget">
+            <div class="card-header">
+                <div class="user-block">
+                    <img class="img-circle"
+                         src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png">
+                    <span class="username">{{ item.name }}</span>
+                    <span class="description">{{ item.category }} - {{ item.createdAt.format('d/m/y H:i:s') }}</span>
+                </div>
+            </div>
+            <div class="card-body card-comments">
+                {% for id, comment in item.comments %}
+
+                    <div class="card-comment">
+
+                        <img class="img-circle"
+                             src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png">
+                        <div class="comment-text">
+                    <span class="username">
+                      <span class="text-muted float-right">{{ comment.created_at | ago }}
+
+                        <form method="POST" action="{{ path('task.admin.comment', {id: id}) }}" style="display: inline;"
+                              onsubmit="return confirmation()">
+                            {{ csrf_input() }}
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>
+                        </form>
+                      </span>
+                    </span>
+                            {{ comment.content | nl2br }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="card-footer">
+                    <form method="post" action="{{ path('task.admin.comment', {id: item.id}) }}">
+                        {{ csrf_input() }}
+                        <div class="img-push">
+                            <textarea class="form-control form-control-sm" style="height:150px;" is="textarea-autogrow"
+                                      placeholder="{{ trans("task.content") }}" name="content"></textarea>
+                            <button class="btn btn-primary float-right mt-2"><i class="fas fa-pen"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

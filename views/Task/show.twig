@@ -1,0 +1,70 @@
+{% extends 'layout.twig' %}
+{% block title trans("task.title") %}
+
+{% block scripts %}
+    {{ ago_scripts() }}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-4">
+            <div class="card card-primary">
+                <div class="card-body">
+                    <h5>{{ trans("details") }}</h5>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <b>{{ trans("date2") }}</b> {{ task.createdAt | ago }} - {{ task.closeAt | ago }}
+                        </li>
+                        <li class="list-group-item"><b>{{ trans("task.category") }}</b>
+                            <span class="badge badge-info">{{ task.category }}</span>
+                        </li>
+                        <li class="list-group-item"><b>{{ trans("state2") }}</b>
+                            <span class="badge badge-success">{{ task.state }}</span>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="progress progress-xs progress-striped">
+                                <div class="progress-bar bg-info" role="progressbar" data-toggle="tooltip"
+                                     title="{{ trans("task.progress") }} : {{ task.progress }}%"
+                                     style="width: {{ task.progress }}%"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="card-header"><h5>{{ task.name }}</h5></div>
+                    <ul class="list-unstyled">
+                        {% if task.comments is empty %}
+                            <li class="media">
+                                <img class="mr-3"
+                                     src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png"
+                                     style="width: 50px;">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1">{{ task.createdAt | ago }}</h5>
+                                    <p>
+                                        No comments for the moment
+                                    </p>
+                                </div>
+                            </li>
+                        {% endif %}
+                        {% for id, comment in task.comments %}
+                            <li class="media">
+                                <img class="mr-3"
+                                     src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png"
+                                     style="width: 50px;">
+                                <div class="media-body">
+                                    <h5 class="mt-0 mb-1">{{ comment.created_at | ago }}</h5>
+                                    <p>{{ comment.content | nl2br }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
