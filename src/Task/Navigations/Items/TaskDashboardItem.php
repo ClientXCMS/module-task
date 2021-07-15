@@ -44,7 +44,8 @@ class TaskDashboardItem implements NavigationItemInterface
         if (count($data) === 0) {
             $ok = false;
         }
-        $first = collect($data)->first(null, new \DateTime());
+        
+        $first = collect($data)->first(null,['lastping' => time()]);
         Carbon::setLocale(explode('_', $this->translater->getLocale(), 2)[0]);
         $lastUpdated = Carbon::createFromTimestamp($first['lastping'])->diffForHumans();
         return $renderer->render("@task_admin/dashboard", compact('data', 'ok', 'lastUpdated'));
