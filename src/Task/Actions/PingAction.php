@@ -35,7 +35,7 @@ class PingAction extends Action
         if (count($data) === 0) {
             $ok = false;
         }
-        $first = collect($data)->first(null, new \DateTime());
+        $first = collect($data)->first(null, ["lastping" => time()]);
         Carbon::setLocale(explode('_', $this->translater->getLocale(), 2)[0]);
         $lastUpdated = Carbon::createFromTimestamp($first['lastping'])->diffForHumans();
         return $this->render('@task/index', compact('first', 'lastUpdated', 'ok', 'data', 'tasks'));
