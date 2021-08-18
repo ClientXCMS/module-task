@@ -3,7 +3,6 @@
 
 namespace App\Task\Navigations\Items;
 
-
 use App\Task\TaskPing;
 use Carbon\Carbon;
 use ClientX\Navigation\NavigationItemInterface;
@@ -40,11 +39,12 @@ class TaskDashboardItem implements NavigationItemInterface
         })->toArray();
         $ok = collect($data)->filter(function ($line) {
                 return $line['online'];
-            })->count() === count($data);
+        })->count() === count($data);
         if (count($data) === 0) {
             $ok = false;
         }
-        $first = collect($data)->first(null, new \DateTime());
+        
+        $first = collect($data)->first(null, ['lastping' => time()]);
         Carbon::setLocale(explode('_', $this->translater->getLocale(), 2)[0]);
         $lastUpdated = Carbon::createFromTimestamp($first['lastping'])->diffForHumans();
         return $renderer->render("@task_admin/dashboard", compact('data', 'ok', 'lastUpdated'));

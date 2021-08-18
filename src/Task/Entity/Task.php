@@ -2,6 +2,8 @@
 
 namespace App\Task\Entity;
 
+use function ClientX\d;
+
 class Task
 {
     private ?int $id = null;
@@ -142,7 +144,7 @@ class Task
 
     public function getName(): ?string
     {
-        return $this->name;
+        return d($this->name);
     }
 
     public function setName(?string $name): void

@@ -17,7 +17,13 @@ class CommentAction extends Action
     private CommentTable $table;
     private TaskTable $taskTable;
 
-    public function __construct(RendererInterface $renderer, TaskTable $taskTable, CommentTable $table, Router $router, FlashService $flash)
+    public function __construct(
+        RendererInterface $renderer,
+        TaskTable $taskTable,
+        CommentTable $table,
+        Router $router,
+        FlashService $flash
+    )
     {
         $this->renderer = $renderer;
         $this->router = $router;

@@ -3,7 +3,6 @@
 
 namespace App\Task\Actions;
 
-
 use App\Auth\DatabaseUserAuth;
 use App\Shop\Database\ServiceTable;
 use App\Task\Database\TaskTable;
@@ -42,5 +41,4 @@ class TaskAction extends Action
         }
         return $this->render('@task/show', compact('task', 'services'));
     }
-
 }

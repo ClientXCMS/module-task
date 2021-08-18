@@ -3,7 +3,6 @@
 
 namespace App\Task;
 
-
 use App\Admin\Database\ServerTable;
 use App\Admin\Entity\Server;
 use ClientX\Cron\AbstractCron;
@@ -31,6 +30,4 @@ class TaskSchedule extends AbstractCron
         $data = $ping->pingAllServers($servers);
         return $data;
     }
-
-
 }
