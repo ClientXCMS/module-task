@@ -19,6 +19,11 @@
         {{ field('category', item.category, trans("task.category"), {options: categories}) }}
     </div>
 
+    {% if edit %}
+        <div class="col-sm-12 col-lg-6 col-md-6">
+            {{ field('state', item.state, trans("state2"), {options: states}) }}
+        </div>
+    {% endif %}
     <div class="col-sm-12 col-lg-6 col-md-6">
         <div class="form-group">
             <label for="progress">{{ trans("task.progress") }} ({{ item.progress }}%)</label>
@@ -27,11 +32,6 @@
                    maxlength="100" minlength="0">
         </div>
     </div>
-    {% if edit %}
-        <div class="col-sm-12 col-lg-6 col-md-6">
-            {{ field('state', item.state, trans("state2"), {options: states}) }}
-        </div>
-    {% endif %}
     {% if create %}
 
         <div class="col-sm-12 col-lg-12 col-md-12">

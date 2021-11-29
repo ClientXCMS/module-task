@@ -48,6 +48,7 @@ class TaskTable extends Table
             ->where('t.id = :id')
             ->join('tasks_comments as c', 'c.task_id = t.id')
             ->into(\stdClass::class)
+            ->order("id DESC")
             ->params(compact('id'))
             ->fetchAll();
         $comments = collect($comments)->mapWithKeys(function ($comment) {

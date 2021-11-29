@@ -15,30 +15,22 @@ use Psr\Http\Message\ServerRequestInterface;
 class TaskAction extends Action
 {
 
-
     private TaskTable $table;
-    private ServiceTable $serviceTable;
 
-    public function __construct(RendererInterface $renderer, TaskTable $table, DatabaseUserAuth $auth, ServiceTable $serviceTable)
+    public function __construct(RendererInterface $renderer, TaskTable $table, DatabaseUserAuth $auth)
     {
         $this->renderer = $renderer;
         $this->table = $table;
         $this->auth = $auth;
-        $this->serviceTable = $serviceTable;
     }
 
     public function __invoke(ServerRequestInterface $request): string
     {
         try {
             $task = $this->table->find($request->getAttribute('id'));
-            if ($this->isLogged()) {
-                $services = $this->serviceTable->findForUser($this->getUserId());
-            } else {
-                $services = [];
-            }
         } catch (NoRecordException $e) {
             return new Response(404);
         }
-        return $this->render('@task/show', compact('task', 'services'));
+        return $this->render('@task/show', compact('task'));
     }
 }

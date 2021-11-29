@@ -45,6 +45,7 @@
                     </thead>
                     <tbody>
                     {% if items is not empty %}
+                        {% set token = csrf_input() %}
                         {% for item in items %}
                             <tr>
                                 <td>#{{ item.id }}</td>
@@ -59,10 +60,20 @@
                                     <div class="bullet bullet-{{ item.bullet }}"></div>
                                 </td>
                                 <td>
+
                                     <a href="{{ path(routePrefix ~'.edit', {id: item.id}) }}" class="btn btn-primary"
                                        data-toggle="tooltip" data-placement="top" title="{{ item.name }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <form style="display: inline;"
+                                          action="{{ path(routePrefix ~'.delete', {id: item.id}) }}" method="POST"
+                                          onsubmit="return confirmation()">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button class="btn btn-danger">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                        {{ token |raw }}
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}

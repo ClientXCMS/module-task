@@ -40,33 +40,60 @@
                     {% include viewPath ~'/form.twig' with {edit : true} %}
                     <button type="submit" class="btn btn-primary">{{ trans("save") }}</button>
                 </form>
+
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-6 col-lg-6">
+        {% if item.state != 'Closed' %}
+<div class="row">
+
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <div class="info-box">
+            <span class="info-box-icon bg-info"><i class="fas fa-car-crash"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{{ trans("task.services") }}</span>
+                <span class="info-box-number"> {{ count }} </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-6">
+
+        <div class="info-box">
+            <span class="info-box-icon bg-{{ ping.online == false ? 'danger' : 'success' }}"><i class="fas fa-server"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">{{ ping.name }} | {{ ping.location }}</span>
+                <span class="info-box-number"> {{ ping.ping }} {{ ping.lastping | formatted_date()}} </span>
+            </div>
+        </div>
+    </div>
+</div>
+        {% endif %}
         <div class="card card-widget">
             <div class="card-header">
                 <div class="user-block">
                     <img class="img-circle"
-                         src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png">
+                         src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png" alt="Icone">
                     <span class="username">{{ item.name }}</span>
                     <span class="description">{{ item.category }} - {{ item.createdAt.format('d/m/y H:i:s') }}</span>
                 </div>
             </div>
             <div class="card-body card-comments">
+                {% set token = csrf_input() %}
                 {% for id, comment in item.comments %}
 
                     <div class="card-comment">
 
                         <img class="img-circle"
-                             src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png">
+                             src="https://media.discordapp.net/attachments/585094063204728832/862988353289191434/task_2.png" alt="Icone">
                         <div class="comment-text">
                     <span class="username">
                       <span class="text-muted float-right">{{ comment.created_at | ago }}
 
                         <form method="POST" action="{{ path('task.admin.comment', {id: id}) }}" style="display: inline;"
                               onsubmit="return confirmation()">
-                            {{ csrf_input() }}
+                            {{ token | raw }}
                             <input type="hidden" name="_method" value="DELETE">
                             <button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>
                         </form>
