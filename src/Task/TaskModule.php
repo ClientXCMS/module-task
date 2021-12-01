@@ -25,7 +25,8 @@ class TaskModule extends Module
         "cpanel" => 2083,
         "virtualizor" => 4083,
         "VirtualizorCloud" => 4085,
-        "plesk" => 80
+        "plesk" => 80,
+        "proxmox" => 8006
     ];
     const DEFINITIONS = __DIR__ . '/config.php';
 
