@@ -2,9 +2,10 @@
 
 namespace App\Task\Entity;
 
+use ClientX\Support\Arrayable;
 use function ClientX\d;
 
-class Task
+class Task implements Arrayable
 {
     private ?int $id = null;
     private ?int $serverId = null;
@@ -160,5 +161,26 @@ class Task
     public function setComments(array $comments): void
     {
         $this->comments = $comments;
+    }
+
+    public function toArray():array
+    {
+        return [
+            'id' => $this->getId(),
+            'comments' => collect($this->comments)->map(function ($comment) {
+                return [
+                    'content' => $comment['content'],
+                    'created_at' => (new \DateTime($comment['created_at']))->format('U')
+                ];
+            }),
+            'name' => $this->getName(),
+            'progress' => $this->getProgress(),
+            'category' => $this->getCategory(),
+            'server_id' => $this->getServerId(),
+            'state' => $this->getState(),
+            'start_at' => $this->getStartAt() ? $this->getStartAt()->format('U') : null,
+            'close_at' => $this->getCloseAt() ? $this->getCloseAt()->format('U') : null,
+            'updated_at' => $this->getUpdatedAt() ? $this->getUpdatedAt()->format('U') : null,
+        ];
     }
 }

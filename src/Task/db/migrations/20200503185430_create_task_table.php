@@ -15,6 +15,7 @@ class CreateTaskTable extends AbstractMigration
             ->addColumn('close_at', 'datetime', ['null' => true])
             ->addColumn('state', 'string', ['default' => \App\Task\Entity\Task::OPEN])
             ->addTimestamps()
+            ->addForeignKey('server_id', 'servers', ['delete' => 'CASCADE'])
             ->create();
 
         $this->table('tasks_comments')

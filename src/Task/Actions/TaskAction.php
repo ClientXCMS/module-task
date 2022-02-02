@@ -4,12 +4,11 @@
 namespace App\Task\Actions;
 
 use App\Auth\DatabaseUserAuth;
-use App\Shop\Database\ServiceTable;
 use App\Task\Database\TaskTable;
 use ClientX\Actions\Action;
 use ClientX\Database\NoRecordException;
 use ClientX\Renderer\RendererInterface;
-use http\Env\Response;
+use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ServerRequestInterface;
 
 class TaskAction extends Action
@@ -24,7 +23,7 @@ class TaskAction extends Action
         $this->auth = $auth;
     }
 
-    public function __invoke(ServerRequestInterface $request): string
+    public function __invoke(ServerRequestInterface $request)
     {
         try {
             $task = $this->table->find($request->getAttribute('id'));

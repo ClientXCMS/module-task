@@ -65,6 +65,5 @@ class TaskTable extends Table
             ->select('t.*', 's.name as serverName')
             ->join('servers as s', 's.id = t.server_id');
         return $query;
-
     }
 }

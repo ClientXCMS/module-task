@@ -4,11 +4,13 @@
 namespace App\Task\Actions;
 
 use App\Task\Database\TaskTable;
+use App\Task\Entity\Task;
 use App\Task\TaskPing;
 use Carbon\Carbon;
 use ClientX\Actions\Action;
 use ClientX\Renderer\RendererInterface;
 use ClientX\Translator\Translater;
+use Psr\Http\Message\ServerRequestInterface;
 
 class PingAction extends Action
 {
@@ -22,7 +24,7 @@ class PingAction extends Action
         $this->translater = $translater;
     }
 
-    public function __invoke(): string
+    public function __invoke(ServerRequestInterface $request)
     {
         $tasks = $this->table->fetchAll();
         $data = (new TaskPing())->getFromSource();
@@ -34,6 +36,12 @@ class PingAction extends Action
         })->count() === count($data);
         if (count($data) === 0) {
             $ok = false;
+        }
+        if (array_key_exists('json', $request->getQueryParams())) {
+            $tasks = collect($tasks)->map(function (Task $task) {
+                return $task->toArray();
+            });
+            return $this->json(['tasks' => $tasks, 'ping' => $data]);
         }
         $first = collect($data)->first(null, ["lastping" => time()]);
         Carbon::setLocale(explode('_', $this->translater->getLocale(), 2)[0]);
