@@ -14,9 +14,6 @@
                 <small class="pull-right">{{ lastUpdated }}</small>
             </div>
         {% endif %}
-        {% if data is empty %}
-            <p>No data</p>
-        {% endif %}
 
         <ul class="list-group">
             {% for line in data %}
@@ -75,6 +72,12 @@
                         </td>
                     </tr>
                 {% endfor %}
+                {% if tasks is empty %}
+
+                    <tr>
+                        <td colspan="7">{{ trans("no_record") }}</td>
+                    </tr>
+                {% endif %}
                 </tbody>
             </table>
         </div>

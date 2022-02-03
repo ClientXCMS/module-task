@@ -26,6 +26,7 @@ class PingAction extends Action
 
     public function __invoke(ServerRequestInterface $request)
     {
+        
         $tasks = $this->table->fetchAll();
         $data = (new TaskPing())->getFromSource();
         $data = collect($data)->sortByDesc(function ($data) {
@@ -34,15 +35,20 @@ class PingAction extends Action
         $ok = collect($data)->filter(function ($line) {
                 return $line['online'];
         })->count() === count($data);
-        if (count($data) === 0) {
-            $ok = false;
-        }
         if (array_key_exists('json', $request->getQueryParams())) {
             $tasks = collect($tasks)->map(function (Task $task) {
                 return $task->toArray();
             });
             return $this->json(['tasks' => $tasks, 'ping' => $data]);
         }
+        if (count($tasks) == collect($tasks)->filter(function (Task $task) {
+            return $task->getBullet() == 'yes';
+        })->count()) {
+            $ok = true;
+        } else {
+            $ok = false;
+        }
+
         $first = collect($data)->first(null, ["lastping" => time()]);
         Carbon::setLocale(explode('_', $this->translater->getLocale(), 2)[0]);
         $lastUpdated = Carbon::createFromTimestamp($first['lastping'])->diffForHumans();
