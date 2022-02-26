@@ -1,4 +1,3 @@
-        $first = collect($data)->first(null, ["lastping" => time()]);
 <?php
 
 
