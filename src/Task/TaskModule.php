@@ -53,7 +53,7 @@ class TaskModule extends Module
             $prefix = $container->get('admin.prefix');
             $router->crud("$prefix/tasks", TaskCrudAction::class, 'task.admin');
             $router->post("$prefix/comments/[i:id]", CommentAction::class, 'task.admin.comment');
-            $router->delete("$prefix/comments/[i:id]", CommentAction::class, 'task.admin.delete');
+            $router->delete("$prefix/comments/[i:id]", CommentAction::class);
         }
     }
 
