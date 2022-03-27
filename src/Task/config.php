@@ -15,7 +15,6 @@ return [
     'navigation.main.items' => add(new DefaultMainItem([DefaultMainItem::makeItem("task.title", "task", "fa fa-server", true, true)], 40)),
     'permissions.list' => add([
         TaskCrudAction::class => 'task',
-        'task.admin.comment' => "Post comments",
-        'task.admin.delete' => "Delete comments"
+        'task.admin.comment' => "Post & Delete comments",
     ])
 ];
