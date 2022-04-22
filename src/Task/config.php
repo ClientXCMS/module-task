@@ -12,7 +12,7 @@ return [
     'admin.menu.items' => add([get(TaskAdminItem::class)]),
     "cron.schedules" => add(TaskSchedule::class),
     'admin.dashboard.items' => add(get(TaskDashboardItem::class)),
-    'navigation.main.items' => add(new DefaultMainItem([DefaultMainItem::makeItem("task.title", "task", "fa fa-server", true, true)], 40)),
+    'navigation.main.items' => add(new DefaultMainItem([DefaultMainItem::makeItem("task.title", "task", "fa fa-server")], 40)),
     'permissions.list' => add([
         TaskCrudAction::class => 'task',
         'task.admin.comment' => "Post & Delete comments",
