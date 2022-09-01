@@ -32,21 +32,19 @@ class PingAction extends Action
         $data = collect($data)->sortByDesc(function ($data) {
             return $data['online'] === false;
         })->toArray();
-        $ok = collect($data)->filter(function ($line) {
-                return $line['online'];
-        })->count() === count($data);
+
+        if (count($data) == collect($data)->filter(function ($row) {
+                return $row['online'] == 'yes';
+            })->count()) {
+            $ok = true;
+        } else {
+            $ok = false;
+        }
         if (array_key_exists('json', $request->getQueryParams())) {
             $tasks = collect($tasks)->map(function (Task $task) {
                 return $task->toArray();
             });
-            return $this->json(['tasks' => $tasks, 'ping' => $data]);
-        }
-        if (count($tasks) == collect($tasks)->filter(function (Task $task) {
-            return $task->getBullet() == 'yes';
-        })->count()) {
-            $ok = true;
-        } else {
-            $ok = false;
+            return $this->json(['tasks' => $tasks, 'ping' => $data, 'ok' => $ok]);
         }
 
         $first = collect($data)->first(null, ["lastping" => time()]);
