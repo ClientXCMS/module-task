@@ -20,7 +20,7 @@ class TaskPing
 
     public function pingServer(Server $server)
     {
-        $ping = ping($server->getIpaddress(), TaskModule::PORTS[$server->getType()], 10);
+        $ping = ping($server->getIpaddress(), TaskModule::PORTS[strtolower($server->getType())], 10);
         return [
             'server' => $server->getIpaddress(),
             'online' => $ping !== 'down',
