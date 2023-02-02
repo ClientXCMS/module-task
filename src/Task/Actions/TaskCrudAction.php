@@ -67,7 +67,7 @@ class TaskCrudAction extends CrudAction
     {
         $id = $request->getAttribute('id');
         $validator = (parent::getValidator($request))
-            ->inArray('category', array_keys(Task::CATEGORIES))
+            ->inArray('category', array_values(Task::CATEGORIES))
             ->between('progress', 0, 100)
             ->notEmpty('name');
         if ($this->mode === 'edit') {
